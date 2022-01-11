@@ -12,18 +12,50 @@
     </tr>
     <tr>
         @{
-            //TODO #2: Complete the View Jobs By Category Table
+            //TODO #2: Complete the View Jobs By Category Table- add in "all" link (run "all" into column
+            //variable in jobs method in list controller) 
         }
 
-        <td></td> @* Feel free to remove or modify this element if necessary. *@
+        <td>
+            <a asp-controller="List" asp-action="Jobs"
+               asp-route-column="all">View All Jobs</a>
+        </td> @* empty cuz it's
+          for 'all' option - will probably look like inside li below but route column
+          will be 'all' as column instead of key- here's the action method  the loop is referencing'
+
+          public IActionResult Jobs(string column, string value)
+        {
+            List<Job> jobs;
+            if (column.ToLower().Equals("all")) ***** all link will reference this
+            {
+                jobs = JobData.FindAll();
+                ViewBag.title = "All Jobs";
+            }
+            else
+            {
+                jobs = JobData.FindByColumnAndValue(column, value);
+                ViewBag.title = "Jobs with " + ColumnChoices[column] + ": " + value;
+            }
+            ViewBag.jobs = jobs;
+
+            return View();
+        }
+        *@
+
+
         @foreach (var category in ViewBag.tableChoices)
+        @* category is a kvp inside tableChoices, a dictionary*@
+
         {
             <td>
                 <ul>
                     @foreach (var item in category.Value)
+                    @* var item is an individual object (a job field item) inside category.Value, a list*@
+
                     {
                         <li>
-                            <a asp-controller="List" asp-action="Jobs" asp-route-column="@category.Key" asp-route-value="@item">@item</a>
+                            <a asp-controller="List" asp-action="Jobs"
+                               asp-route-column="@category.Key" asp-route-value="@item">@item</a>
                         </li>
                     }
                 </ul>
