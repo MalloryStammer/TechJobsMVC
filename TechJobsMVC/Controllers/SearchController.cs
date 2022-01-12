@@ -19,36 +19,25 @@ namespace TechJobsMVC.Controllers
             return View();
         }
 
-        // TODO #3: Create an action method to process a search request and render the updated search view.
-        //route search/results
-        //HttpPost
-        //radial button sets searchtype, input sets search term
-
-        //actionmethod search(string searchtype string search term)
-
-        //if searchterm="" (empty string), find all jobs,
-        //otherwise set search term to jobdata.findbycolumnandvalue
-
-        public IActionResult SearchJobs(string searchType, string searchTerm)
+        //[HttpPost]
+        public IActionResult Results(string searchType, string searchTerm)
         {
             List<Job> jobs;
+            
             if (String.IsNullOrEmpty(searchTerm))
             { 
                 jobs = JobData.FindAll();
+                ViewBag.title = "All Available Jobs";
             }
-
             else
             {
                 jobs = JobData.FindByColumnAndValue(searchType, searchTerm);
             }
             ViewBag.jobs = jobs;
-            ViewBag.title = "Jobs with " + searchTerm;
-
-
-            return View();
+            ViewBag.title = "Jobs with  ' " + searchTerm+ " ' ";
+            ViewBag.columns = ListController.ColumnChoices;
+            return View("Index");
         }
-
     }
-
 }
 
